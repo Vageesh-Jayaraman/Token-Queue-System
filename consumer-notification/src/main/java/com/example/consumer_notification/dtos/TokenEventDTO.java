@@ -2,9 +2,11 @@ package com.example.consumer_notification.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class TokenEventDTO {
     private String eventType;
     private Long tokenId;

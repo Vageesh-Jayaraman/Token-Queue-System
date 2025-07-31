@@ -7,9 +7,10 @@ import com.example.consumer_notification.dtos.TokenEventDTO;
 
 @Service
 public class ConsumeService {
-    
-    @KafkaListener(topics = "token-events", groupId = "notification-group", containerFactory = "kafkaListenerContainerFactory")
+
+    @KafkaListener(topics = "token-events", groupId = "notification-group")
     public void consume(TokenEventDTO event) {
         System.out.println("Received Token Event: " + event);
     }
 }
+
