@@ -56,6 +56,7 @@ public class TokenService {
                 savedToken.getCounter(),
                 userId,
                 "PENDING",
+                savedToken.getUser().getEmail(),
                 Instant.now().toString());
 
         kafkaTemplate.send("token-events", event); 
@@ -83,6 +84,7 @@ public class TokenService {
             updatedToken.getDepartment().getDepartment_id(),
             updatedToken.getCounter(),
             updatedToken.getUser().getUser_id(),
+            updatedToken.getUser().getEmail(),
             newStatus,
             Instant.now().toString()
         );

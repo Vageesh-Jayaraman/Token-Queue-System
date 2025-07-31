@@ -23,14 +23,15 @@ public class UserService {
         UserModel user = new UserModel();
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword()); 
+        user.setEmail(userDTO.getEmail());
 
         UserModel savedUser = userRepository.save(user);
-        return new UserDTO(savedUser.getUsername(), savedUser.getPassword());
+        return new UserDTO(savedUser.getUsername(), savedUser.getPassword(), savedUser.getEmail());
     }
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(user -> new UserDTO(user.getUsername(), user.getPassword()))
+                .map(user -> new UserDTO(user.getUsername(), user.getPassword(), user.getEmail()))
                 .collect(Collectors.toList());
     }
 }

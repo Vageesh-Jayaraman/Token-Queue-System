@@ -12,5 +12,6 @@ public class TokenEventDTO {
     private Long tokenNo;
     private Long userId;
     private String status;
+    private String email;
     private String timestamp;
 }
