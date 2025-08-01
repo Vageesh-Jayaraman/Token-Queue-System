@@ -13,6 +13,7 @@ public class TokenEventDTO {
     private String departmentId;
     private Long tokenNo;
     private Long userId;
+    private String email;
     private String status;
     private String timestamp;
 }
