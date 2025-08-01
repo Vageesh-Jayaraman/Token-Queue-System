@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.tokenqueue.dtos.TokenEventDTO;
+
 @Service
 public class RedisService {
 
@@ -18,5 +20,15 @@ public class RedisService {
     public Long getNextToken(String departmentId){
         String key = departmentId + "_counter";
         return redisTemplate.opsForValue().increment(key);
+    }
+
+    public void addToQueue(TokenEventDTO token){
+        String department = token.getDepartmentId();
+        Long userId = token.getUserId();
+        Long tokenId = token.getTokenNo();
+
+        String key = "queue:" + department;
+        String value = userId + ":" + tokenId;
+        redisTemplate.opsForList().rightPush(key, value);
     }
 }

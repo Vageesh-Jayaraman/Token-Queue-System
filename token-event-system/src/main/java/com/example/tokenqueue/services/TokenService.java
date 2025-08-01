@@ -60,6 +60,7 @@ public class TokenService {
                 Instant.now().toString());
 
         kafkaTemplate.send("token-events", event); 
+        redisService.addToQueue(event);
 
         return savedToken;
     }
