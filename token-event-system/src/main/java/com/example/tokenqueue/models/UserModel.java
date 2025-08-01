@@ -1,14 +1,7 @@
 package com.example.tokenqueue.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
@@ -20,7 +13,12 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
+
     private String username;
     private String password;
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")  
+    private RoleModel role;
 }
