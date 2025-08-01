@@ -21,4 +21,7 @@ public class UserModel {
     @ManyToOne
     @JoinColumn(name = "role_id")  
     private RoleModel role;
+
+    @ManyToOne(optional = true)  
+    private DepartmentModel department;
 }

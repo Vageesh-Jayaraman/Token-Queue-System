@@ -14,4 +14,5 @@ public class UserDTO {
     private String password;
     private String email;
     private Long role_id;
+    private String department_id;
 }
