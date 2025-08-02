@@ -1,12 +1,12 @@
 package com.example.consumer_notification.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import com.example.consumer_notification.dtos.TokenEventDTO;
 
 @Service
 public class ConsumeService {
@@ -14,11 +14,22 @@ public class ConsumeService {
     @Autowired
     private JavaMailSender mailSender;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @KafkaListener(topics = "token-events", groupId = "notification-group")
-    public void consume(TokenEventDTO event) {
-        System.out.println("Received Token Event: " + event);
-        TokenEventDTO receivedToken = event;
-        sendEmail(receivedToken.getEmail(), receivedToken.getTokenNo(), receivedToken.getDepartmentId(), receivedToken.getEventType());
+    public void consume(String message) {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(message);
+
+            String email = jsonNode.get("email").asText();
+            Long token = jsonNode.get("tokenNo").asLong();
+            String departmentId = jsonNode.get("departmentId").asText();
+            String eventType = jsonNode.get("eventType").asText();
+            sendEmail(email, token, departmentId, eventType);
+        } catch (Exception e) {
+            System.err.println("Failed to parse JSON message: " + message);
+            e.printStackTrace();
+        }
     }
 
     public void sendEmail(String emailId, Long token, String departmentId, String type){
@@ -30,4 +41,3 @@ public class ConsumeService {
         mailSender.send(message);
     }
 }
-
