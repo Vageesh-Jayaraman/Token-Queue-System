@@ -1,20 +1,57 @@
-import React from 'react';
-import NumberBox from '../components/NumberBox';
+import React, { useEffect, useState } from 'react';
+import DepartmentGroup from '../components/DepartmentGroup';
 
 function App() {
-  const numbers = Array.from({ length: 56 }, (_, i) => i + 1);
+  const [departments, setDepartments] = useState({}); 
 
-  const containerStyle = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '12px',
-    padding: '20px',
-  };
+  useEffect(() => {
+    const eventSource = new EventSource('http://localhost:8082/stream');
+
+    eventSource.onmessage = (event) => {
+      console.log(event.data);
+      const data = JSON.parse(event.data);
+      
+      const { event: eventType, departmentId, tokenNo } = data;
+
+      setDepartments((prev) => {
+        const currentTokens = prev[departmentId] || [];
+
+        if (eventType === 'TOKEN_GENERATED') {
+          return {
+            ...prev,
+            [departmentId]: [...currentTokens, tokenNo],
+          };
+        }
+
+        if (eventType === 'TOKEN_SERVED') {
+          return {
+            ...prev,
+            [departmentId]: currentTokens.filter((t) => t !== tokenNo),
+          };
+        }
+
+        return prev; 
+      });
+    };
+
+    eventSource.onerror = (err) => {
+      console.error('SSE error:', err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   return (
-    <div className="App" style={containerStyle}>
-      {numbers.map((num) => (
-        <NumberBox key={num} number={num} />
+    <div style={{ padding: '20px' }}>
+      {Object.entries(departments).map(([departmentId, tokens]) => (
+        <DepartmentGroup
+          key={departmentId}
+          department={departmentId}
+          numbers={tokens}
+        />
       ))}
     </div>
   );
