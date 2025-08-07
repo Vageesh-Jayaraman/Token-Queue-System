@@ -62,7 +62,7 @@ TOKEN-SYSTEM/
 
      ```json
      {
-       "eventType": "TOKEN_PENDING",
+       "eventType": "TOKEN_GENERATED",
        "tokenId": 101,
        "departmentId": "CW",
        "tokenNo": 12,

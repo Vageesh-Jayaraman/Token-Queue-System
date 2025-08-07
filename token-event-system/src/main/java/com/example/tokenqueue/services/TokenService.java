@@ -55,7 +55,6 @@ public class TokenService {
                 departmentId,
                 savedToken.getCounter(),
                 userId,
-                "PENDING",
                 savedToken.getUser().getEmail(),
                 Instant.now().toString());
 
@@ -86,7 +85,6 @@ public class TokenService {
             updatedToken.getCounter(),
             updatedToken.getUser().getUser_id(),
             updatedToken.getUser().getEmail(),
-            newStatus,
             Instant.now().toString()
         );
     
