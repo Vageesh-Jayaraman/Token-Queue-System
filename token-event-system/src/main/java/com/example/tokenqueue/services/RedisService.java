@@ -24,11 +24,11 @@ public class RedisService {
 
     public void addToQueue(TokenEventDTO token){
         String department = token.getDepartmentId();
+        Long tokenId = token.getTokenId();
         Long userId = token.getUserId();
-        Long tokenId = token.getTokenNo();
-
+        Long tokenNo = token.getTokenNo();
         String key = "queue:" + department;
-        String value = userId + ":" + tokenId;
+        String value = userId + ":" + tokenId + ":" + tokenNo;
         redisTemplate.opsForList().rightPush(key, value);
     }
 }
