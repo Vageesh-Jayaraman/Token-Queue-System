@@ -21,9 +21,4 @@ public class TokenController {
     public TokenModel getTokenStatus(@PathVariable Long userId) {
         return tokenService.getTokenByUser(userId);
     }
-
-    @PutMapping("/{tokenId}")
-    public TokenModel updateStatus(@PathVariable Long tokenId, @RequestParam String status) {
-        return tokenService.updateStatus(tokenId, status);
-    }
 }

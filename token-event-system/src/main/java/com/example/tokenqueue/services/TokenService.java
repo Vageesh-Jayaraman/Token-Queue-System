@@ -71,26 +71,5 @@ public class TokenService {
                 .orElseThrow(() -> new RuntimeException("Token not found for user"));
     }
 
-    public TokenModel updateStatus(Long tokenId, String newStatus) {
-        TokenModel token = tokenRepository.findById(tokenId)
-                .orElseThrow(() -> new RuntimeException("Token not found"));
-        
-        token.setStatus(newStatus);
-        TokenModel updatedToken = tokenRepository.save(token);
-    
-        TokenEventDTO event = new TokenEventDTO(
-            "TOKEN_UPDATED",
-            updatedToken.getId(),
-            updatedToken.getDepartment().getDepartment_id(),
-            updatedToken.getCounter(),
-            updatedToken.getUser().getUser_id(),
-            updatedToken.getUser().getEmail(),
-            Instant.now().toString()
-        );
-    
-        kafkaTemplate.send("token-events", event);
-    
-        return updatedToken;
-    }
     
 }
