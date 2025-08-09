@@ -1,6 +1,6 @@
 # Token Queue System
 
-> Backend system to manage service queues using tokens.
+> A backend service for managing department queues with tokens, providing real-time updates and notifications for smoother customer service.
 
 ## Project Structure
 
