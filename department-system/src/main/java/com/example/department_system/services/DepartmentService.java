@@ -1,6 +1,7 @@
 package com.example.department_system.services;
 
 import com.example.department_system.dtos.TokenEventDTO;
+import com.example.department_system.repositories.TokenRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ public class DepartmentService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    TokenRepository tokenRepository;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -44,6 +48,7 @@ public class DepartmentService {
             String[] parts = token.split(":");
             if (parts.length == 3) {
                 Long tokenId = Long.parseLong(parts[1]);
+                tokenRepository.markAsServed(tokenId);
                 TokenEventDTO event = new TokenEventDTO("TOKEN_SERVED", tokenId);
                 kafkaTemplate.send("token-events", event);
             }
